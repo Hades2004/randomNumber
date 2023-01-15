@@ -10,7 +10,7 @@ pipeline {
           }
         }
         steps {
-          sh 'spring-boot:build-image -Dspring-boot.build-image.imageName=hades2004/randomnumber'
+          sh 'mvn spring-boot:build-image -Dspring-boot.build-image.imageName=hades2004/randomnumber'
         }
       }
 /*      
