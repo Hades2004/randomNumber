@@ -10,15 +10,17 @@ pipeline {
           }
         }
         steps {
-          sh 'mvn clean install'
+          sh 'spring-boot:build-image -Dspring-boot.build-image.imageName=hades2004/randomnumber'
         }
       }
+/*      
       stage('Docker Build') {
           agent any
         steps {
           sh 'docker build -t hades2004/randomnumber:latest .'
         }
       }
+*/
       stage('Docker Push') {
           agent any
         steps {
