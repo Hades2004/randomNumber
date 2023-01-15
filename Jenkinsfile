@@ -13,4 +13,5 @@ pipeline {
           sh 'mvn spring-boot:build-image -Dspring-boot.build-image.imageName=hades2004/randomnumber'
         }
       }
+   }
 }
