@@ -2,12 +2,6 @@
 
 pipeline {
     agent none
-    tasks.named("bootBuildImage") {
-      docker {
-//        host = "unix:///Users/<user>/.colima/docker.sock"
-        host = "tcp://localhost:2376"
-      }
-    }
     
     stages {
       stage('Maven Install') {
