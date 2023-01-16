@@ -28,12 +28,5 @@ pipeline {
           }
         }
       }
-
-      stage('Docker Run') {
-      	agent any
-      	steps {
-          sh 'docker run --hostname=2caa34bf6d58 --mac-address=02:42:ac:11:00:02 --env=PATH=/opt/openjdk-17/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin --env=JAVA_HOME=/opt/openjdk-17 --env=JAVA_VERSION=17-ea+14 -p 8090:8080 --restart=no --runtime=runc -d hades2004/randomnumber'
-        }
-      }
     }
 }
