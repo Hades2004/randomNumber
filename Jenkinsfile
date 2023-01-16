@@ -30,12 +30,10 @@ pipeline {
       }
       stage('Deploy App') {
         steps {
-          withCredentials([
-            string(credentialsId: 'jenkins-token', variable: 'api_token')
-            ]) {
-             sh 'kubectl --token $api_token --server hhttps://host.docker.internal:45375 --insecure-skip-tls-verify=true apply -f deployment2.yaml '
-               }
-            }
-           }
+          withCredentials([string(credentialsId: 'jenkins-token', variable: 'api_token')]) {
+             sh 'kubectl --token $api_token --server hhttps://host.docker.internal:45375 --insecure-skip-tls-verify=true apply -f deployment2.yaml '
+          }
+        }
+      }
     }
 }
