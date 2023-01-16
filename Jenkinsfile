@@ -31,12 +31,14 @@ pipeline {
       stage('Docker Stop') {
       	agent any
       	steps {
+      	script {
       	  try {
             sh 'docker stop 2caa34bf6d58'
           } catch (Exception e) {
               echo 'Exception occurred: ' + e.toString()
               sh 'Handle the exception!'
           }
+        }  
         }
       }
       stage('Docker Run') {
