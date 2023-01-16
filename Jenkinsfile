@@ -29,7 +29,7 @@ pipeline {
         }
       }
       stage('Deploy App') {
-        steps {
+        steps {
           withCredentials([
             string(credentialsId: 'jenkins-token', variable: 'api_token')
             ]) {
