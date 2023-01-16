@@ -37,5 +37,12 @@ pipeline {
           }
         }
       }
+      stage('Update Service') {
+        steps {
+          withCredentials([string(credentialsId: 'jenkins-token', variable: 'api_token')]) {
+             sh './kubectl --token $api_token --server https://host.docker.internal:45375 --insecure-skip-tls-verify=true apply -f service.yaml '
+          }
+        }
+      }      
     }
 }
