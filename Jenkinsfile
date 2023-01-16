@@ -31,7 +31,9 @@ pipeline {
       stage('Deploy App') {
         steps {
           withCredentials([string(credentialsId: 'jenkins-token', variable: 'api_token')]) {
-             sh 'kubectl --token $api_token --server hhttps://host.docker.internal:45375 --insecure-skip-tls-verify=true apply -f deployment2.yaml '
+             sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'  
+             sh 'chmod u+x ./kubectl'  
+             sh './kubectl --token $api_token --server hhttps://host.docker.internal:45375 --insecure-skip-tls-verify=true apply -f deployment2.yaml '
           }
         }
       }
