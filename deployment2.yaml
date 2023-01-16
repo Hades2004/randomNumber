@@ -1,0 +1,52 @@
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: randomnumber
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: randomnumber-app
+  template:
+    metadata:
+      labels:
+        app: randomnumber-app
+    spec:
+      securityContext:
+            fsGroup: 1000
+            runAsUser: 1000
+      serviceAccountName: jenkins-admin
+      containers:
+        - name: randomnumber-app
+          image: hades2004/randomnumber:latest
+          resources:
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
+            requests:
+              memory: "500Mi"
+              cpu: "500m"
+          ports:
+            - name: httpport
+              containerPort: 8080
+            - name: jnlpport
+              containerPort: 50000
+          livenessProbe:
+            httpGet:
+              path: "/randomnumber/"
+              port: 8080
+            initialDelaySeconds: 90
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: "/randomnumber/"
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
