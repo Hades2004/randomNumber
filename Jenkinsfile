@@ -30,7 +30,7 @@ pipeline {
       }
       stage('Deploy App') {
         steps {
-          withCredentials([file(credentialsId: 'kubectl-client-cert', variable: 'client_cert''),
+          withCredentials([file(credentialsId: 'kubectl-client-cert', variable: 'client_cert'),
                  file(credentialsId: 'kubectl-client-key', variable: 'client_key')])  {
              sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'  
              sh 'chmod u+x ./kubectl'  
