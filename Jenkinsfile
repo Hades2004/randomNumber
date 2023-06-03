@@ -41,7 +41,7 @@ pipeline {
       stage('Update Service') {
         steps {
           withCredentials([string(credentialsId: 'jenkins-token', variable: 'api_token')]) {
-             sh ./kubectl --client-certificate=$client-cert --client-key=$client-key --server https://192.168.49.2:8443 --insecure-skip-tls-verify=true apply -f service.yaml '
+             sh './kubectl --client-certificate=$client-cert --client-key=$client-key --server https://192.168.49.2:8443 --insecure-skip-tls-verify=true apply -f service.yaml '
           }
         }
       }      
