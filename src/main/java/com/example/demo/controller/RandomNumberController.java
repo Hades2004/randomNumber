@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/randomNumber")
 public class RandomNumberController {
 	
-	@GetMapping("/")
+	@GetMapping("")
 	private Mono<Integer> getEmployeeById() {
 	    return Mono.just(5);
 	}
