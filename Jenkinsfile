@@ -34,7 +34,7 @@ pipeline {
                  file(credentialsId: 'kubectl-client-key', variable: 'client_key')])  {
              sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'  
              sh 'chmod u+x ./kubectl'  
-             sh './kubectl --client-certificate=$client_cert --client-key=$client_key --server https://172.17.0.1:43527 --insecure-skip-tls-verify=true apply -f deployment2.yaml '
+             sh './kubectl --client-certificate=$client_cert --client-key=$client_key --server https://host.docker.internal:43527 --insecure-skip-tls-verify=true apply -f deployment2.yaml '
           }
         }
       }
@@ -42,7 +42,7 @@ pipeline {
         steps {
           withCredentials([file(credentialsId: 'kubectl-client-cert', variable: 'client_cert'),
                  file(credentialsId: 'kubectl-client-key', variable: 'client_key')])  {
-             sh './kubectl --client-certificate=$client_cert --client-key=$client_key --server https://172.17.0.1:43527 --insecure-skip-tls-verify=true apply -f service.yaml '
+             sh './kubectl --client-certificate=$client_cert --client-key=$client_key --server https://host.docker.internal:43527 --insecure-skip-tls-verify=true apply -f service.yaml '
           }
         }
       }      
