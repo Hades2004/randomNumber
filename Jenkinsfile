@@ -30,19 +30,19 @@ pipeline {
       }
       stage('Deploy App') {
         steps {
-          withCredentials([file(credentialsId: 'kubectl-client-cert', variable: 'client-cert'),
-                 file(credentialsId: 'kubectl-client-key', variable: 'client-key')])  {
+          withCredentials([file(credentialsId: 'kubectl-client-cert', variable: 'client_cert''),
+                 file(credentialsId: 'kubectl-client-key', variable: 'client_key')])  {
              sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'  
              sh 'chmod u+x ./kubectl'  
-             sh './kubectl --client-certificate='$client-cert' --client-key='$client-key' --server https://192.168.49.2:8443 --insecure-skip-tls-verify=true apply -f deployment2.yaml '
+             sh './kubectl --client-certificate=$client_cert --client-key=$client_key --server https://192.168.49.2:8443 --insecure-skip-tls-verify=true apply -f deployment2.yaml '
           }
         }
       }
       stage('Update Service') {
         steps {
-          withCredentials([file(credentialsId: 'kubectl-client-cert', variable: 'client-cert'),
-                 file(credentialsId: 'kubectl-client-key', variable: 'client-key')])  {
-             sh './kubectl --client-certificate='$client-cert' --client-key='$client-key' --server https://192.168.49.2:8443 --insecure-skip-tls-verify=true apply -f service.yaml '
+          withCredentials([file(credentialsId: 'kubectl-client-cert', variable: 'client_cert'),
+                 file(credentialsId: 'kubectl-client-key', variable: 'client_key')])  {
+             sh './kubectl --client-certificate=$client_cert --client-key=$client_key --server https://192.168.49.2:8443 --insecure-skip-tls-verify=true apply -f service.yaml '
           }
         }
       }      
