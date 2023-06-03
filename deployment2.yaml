@@ -35,7 +35,7 @@ spec:
               containerPort: 50000
           livenessProbe:
             httpGet:
-              path: "/randomNumber/"
+              path: "/randomNumber"
               port: 8081
             initialDelaySeconds: 90
             periodSeconds: 10
@@ -43,7 +43,7 @@ spec:
             failureThreshold: 5
           readinessProbe:
             httpGet:
-              path: "/randomNumber/"
+              path: "/randomNumber"
               port: 8081
             initialDelaySeconds: 60
             periodSeconds: 10
