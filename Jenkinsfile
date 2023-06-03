@@ -7,6 +7,7 @@ pipeline {
           agent {
           docker {
               image 'maven:3.8.7'
+              args '-u root --privileged'
           }
         }
         steps {
