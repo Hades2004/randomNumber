@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/randomNumber")
+@RequestMapping("/rest")
 public class RandomNumberController {
 	
-	@GetMapping("")
-	private Mono<Integer> getEmployeeById() {
+	@GetMapping("/randomNumber")
+	public Mono<Integer> randomNumber() {
 	    return Mono.just(6);
 	}
 
