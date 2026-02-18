@@ -5,12 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -20,24 +16,23 @@ public class WebSecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(requests -> requests
-                .requestMatchers("/", "/index.html", "/actuator/*", "*.js", "*.css").permitAll()
+                .requestMatchers("/", "/index.html", "*.js", "*.css", "/h2-console/**").permitAll()
+                .requestMatchers("/actuator/","/actuator/*").hasRole("MONITORING")
                 .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
-                .formLogin(form -> form.disable());
+                .formLogin(form -> form.disable())
+
+                // 🔥 WICHTIG für H2:
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/h2-console/**"))
+                .headers(headers -> headers
+                        .frameOptions(frame -> frame.sameOrigin()));
         return http.build();
     }
 
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    UserDetailsService userDetailsService(PasswordEncoder encoder) {
-        UserDetails user = User.withUsername("user").password(encoder.encode("password")).roles("USER").build();
-        UserDetails monitoring = User.withUsername("monitoring").password(encoder.encode("monitoring"))
-                .roles("MONITORING").build();
-        return new InMemoryUserDetailsManager(user, monitoring);
     }
 
 }
