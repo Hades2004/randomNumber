@@ -16,7 +16,7 @@ pipeline {
       }
       stage('Docker Build') {
         steps {
-          sh 'docker build -t hades2004/randomnumber:latest .'
+          sh 'DOCKER_BUILDKIT=0 docker build -t hades2004/randomnumber:latest .'
         }
       }
       stage('Docker Push') {
