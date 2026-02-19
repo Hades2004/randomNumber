@@ -7,11 +7,11 @@ pipeline {
           agent {
           docker {
               image 'maven:3.9.11'
-              args '-u root --privileged'
+              args '-u root --privileged --network host'
           }
         }
         steps {
-          sh 'mvn clean install'
+          sh 'mvn clean install -DskipDownload=true'
         }
       }
       stage('Docker Build') {
