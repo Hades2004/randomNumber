@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.kafka.CustomMessage;
+import com.example.demo.kafka.MessageProducer;
 import com.example.demo.service.RandomNumberService;
 
 import lombok.RequiredArgsConstructor;
@@ -13,10 +15,13 @@ import reactor.core.publisher.Mono;
 public class RandomNumberController {
 	
 	private final RandomNumberService randomNumberService;
+	private final MessageProducer messageProducer;
 	
 	@GetMapping("/rest/randomNumber")
 	public Mono<Integer> randomNumber() {
-	    return Mono.just(randomNumberService.getRandomNumber());
+		int randomNumber = randomNumberService.getRandomNumber();
+		messageProducer.sendMessage(new CustomMessage("RandomNumber", "Produced random number: " + randomNumber));
+	    return Mono.just(randomNumber);
 	}
 
 }
