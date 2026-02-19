@@ -29,5 +29,20 @@ services:
     volumes:
       - kafka_data:/tmp/kraft-combined-logs
 
+  jenkins:
+    image: jenkins/jenkins:lts
+    privileged: true
+    user: root
+    ports:
+     - "8080:8080"
+     - "50000:50000"
+    volumes:
+     - jenkins_home:/var/jenkins_home
+     - /run/user/1000/podman/podman.sock:/var/run/docker.sock # Pfad vom Host (Podman) -> Pfad im Container (Jenkins erwartet Docker)  
+    environment:
+     - DOCKER_HOST=unix:///var/run/docker.sock
+     - JAVA_OPTS=-Djenkins.install.runSetupWizard=true
+
 volumes:
   kafka_data:
+  jenkins_home:
