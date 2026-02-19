@@ -4,10 +4,10 @@ pipeline {
     agent any
     stages {
       stage('Maven Install') {
-          agent {
+        agent {
           docker {
-              image 'maven:3.9.11'
-              args '-u root --privileged --network host'
+            image 'maven:3.9.11'
+            args '-u root --privileged --network host'
           }
         }
         steps {
@@ -15,16 +15,14 @@ pipeline {
         }
       }
       stage('Docker Build') {
-          agent any
         steps {
           sh 'docker build -t hades2004/randomnumber:latest .'
         }
       }
       stage('Docker Push') {
-          agent any
         steps {
           withCredentials([usernamePassword(credentialsId: 'docker-credentials', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-              sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+            sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
             sh 'docker push hades2004/randomnumber:latest'
           }
         }
