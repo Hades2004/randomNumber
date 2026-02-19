@@ -10,7 +10,7 @@ import org.springframework.cache.CacheManager;
 import com.example.demo.service.SquareNumberService;
 
 @SpringBootTest
-public class SquareNumberCacheTest {
+class SquareNumberCacheTest {
 
     @Autowired
     private SquareNumberService squareNumberService;
