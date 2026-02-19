@@ -7,7 +7,7 @@ pipeline {
         agent {
           docker {
             image 'maven:3.9.11'
-            args '-u root --privileged --network host'
+            args '-u root --privileged --network host -v /var/home/bazzite/jenkins_home/.m2:/root/.m2:Z'
           }
         }
         steps {
