@@ -33,7 +33,7 @@ pipeline {
         steps {
              sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'  
              sh 'chmod u+x ./kubectl'  
-             sh './kubectl --server http://127.0.0.1:8001 --insecure-skip-tls-verify=true apply -f deployment2.yaml '
+             sh './kubectl --server http://127.0.0.1:8001 --insecure-skip-tls-verify=true apply -f deployment.yaml '
         }
       }
       stage('Update Service') {
