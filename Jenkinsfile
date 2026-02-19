@@ -6,7 +6,7 @@ pipeline {
       stage('Maven Install') {
           agent {
           docker {
-              image 'maven:3.8.7'
+              image 'maven:3.9.11'
               args '-u root --privileged'
           }
         }
