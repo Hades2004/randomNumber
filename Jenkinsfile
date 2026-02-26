@@ -33,12 +33,16 @@ pipeline {
         steps {
              sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'  
              sh 'chmod u+x ./kubectl'  
-             sh './kubectl --server https://127.0.0.1:39543 --insecure-skip-tls-verify=true apply -f deployment.yaml '
+             withCredentials([string(credentialsId: 'k8s-deployer-token', variable: 'K8S_TOKEN')]) {
+                 sh './kubectl --server https://127.0.0.1:39543 --insecure-skip-tls-verify=true --token=${K8S_TOKEN} apply -f deployment.yaml'
+             }
         }
       }
       stage('Update Service') {
         steps {
-             sh './kubectl --server https://127.0.0.1:39543 --insecure-skip-tls-verify=true apply -f service.yaml '
+             withCredentials([string(credentialsId: 'k8s-deployer-token', variable: 'K8S_TOKEN')]) {
+                 sh './kubectl --server https://127.0.0.1:39543 --insecure-skip-tls-verify=true --token=${K8S_TOKEN} apply -f service.yaml'
+             }
         }
       }      
     }
