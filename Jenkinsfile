@@ -26,17 +26,23 @@ pipeline {
           expression {
             unstash 'app-jar'
             script {
+              // Pfad im persistenten Jenkins-Home
+              def cacheDir = "/var/home/bazzite/jenkins_home/build_cache/${env.JOB_NAME}"
+              sh "mkdir -p ${cacheDir}"
+              
               def currentDockerHash = readFile('dockerfile.sha256').trim()
               def currentJarHash = readFile('jar.sha256').trim()
               
-              def lastDockerHash = fileExists('.last_dockerfile.sha256') ? readFile('.last_dockerfile.sha256').trim() : ""
-              def lastJarHash = fileExists('.last_jar.sha256') ? readFile('.last_jar.sha256').trim() : ""
+              // Alte Hashes lesen (falls vorhanden)
+              def lastDockerHash = sh(script: "cat ${cacheDir}/last_dockerfile.sha256 2>/dev/null || echo ''", returnStdout: true).trim()
+              def lastJarHash = sh(script: "cat ${cacheDir}/last_jar.sha256 2>/dev/null || echo ''", returnStdout: true).trim()
               
+              // Prüfen ob sich etwas geändert hat oder der letzte Build fehlgeschlagen ist
               def changed = (currentDockerHash != lastDockerHash) || (currentJarHash != lastJarHash) || (currentBuild.previousBuild?.result != 'SUCCESS')
               
               if (changed) {
-                writeFile file: '.last_dockerfile.sha256', text: currentDockerHash
-                writeFile file: '.last_jar.sha256', text: currentJarHash
+                sh "echo '${currentDockerHash}' > ${cacheDir}/last_dockerfile.sha256"
+                sh "echo '${currentJarHash}' > ${cacheDir}/last_jar.sha256"
                 env.DOCKER_CHANGED = 'true'
               } else {
                 env.DOCKER_CHANGED = 'false'
