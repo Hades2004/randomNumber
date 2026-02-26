@@ -12,10 +12,12 @@ pipeline {
         }
         steps {
           sh 'mvn clean install -DskipDownload=true'
+          stash name: 'app-jar', includes: 'target/demo.jar'
         }
       }
       stage('Docker Build') {
         steps {
+          unstash 'app-jar'
           sh 'DOCKER_BUILDKIT=0 docker build -t hades2004/randomnumber:latest .'
         }
       }
