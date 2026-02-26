@@ -20,7 +20,7 @@ spec:
       serviceAccountName: default
       containers:
         - name: randomnumber-app
-          image: hades2004/randomnumber:latest
+          image: docker.io/hades2004/randomnumber:latest
           resources:
             limits:
               memory: "2Gi"

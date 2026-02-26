@@ -18,14 +18,14 @@ pipeline {
       stage('Docker Build') {
         steps {
           unstash 'app-jar'
-          sh 'DOCKER_BUILDKIT=0 docker build -t hades2004/randomnumber:latest .'
+          sh 'DOCKER_BUILDKIT=0 docker build -t docker.io/hades2004/randomnumber:latest .'
         }
       }
       stage('Docker Push') {
         steps {
           withCredentials([usernamePassword(credentialsId: 'docker-credentials', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-            sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-            sh 'docker push hades2004/randomnumber:latest'
+            sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword} docker.io"
+            sh 'docker push docker.io/hades2004/randomnumber:latest'
           }
         }
       }
