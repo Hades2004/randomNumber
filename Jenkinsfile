@@ -85,6 +85,8 @@ pipeline {
                      ./kubectl --server=${K8S_API_SERVER} --insecure-skip-tls-verify=true --token=\${K8S_TOKEN} apply -f -
                  """
                  sh './kubectl --server=${K8S_API_SERVER} --insecure-skip-tls-verify=true --token=${K8S_TOKEN} apply -f postgres-k8s.yaml'
+                 sh './kubectl --server=${K8S_API_SERVER} --insecure-skip-tls-verify=true --token=${K8S_TOKEN} apply -f kafka-k8s.yaml'
+                 sh './kubectl --server=${K8S_API_SERVER} --insecure-skip-tls-verify=true --token=${K8S_TOKEN} apply -f redis-k8s.yaml'
                  sh './kubectl --server=${K8S_API_SERVER} --insecure-skip-tls-verify=true --token=${K8S_TOKEN} apply -f deployment.yaml'
                  sh './kubectl --server=${K8S_API_SERVER} --insecure-skip-tls-verify=true --token=${K8S_TOKEN} apply -f ingress.yaml'
              }
