@@ -37,6 +37,9 @@ spec:
             httpGet:
               path: "/randomNumber"
               port: 8081
+              httpHeaders:
+              - name: Authorization
+                value: Basic bW9uaXRvcmluZzpwYXNzd29yZA==
             initialDelaySeconds: 90
             periodSeconds: 10
             timeoutSeconds: 5
@@ -45,6 +48,9 @@ spec:
             httpGet:
               path: "/randomNumber"
               port: 8081
+              httpHeaders:
+              - name: Authorization
+                value: Basic bW9uaXRvcmluZzpwYXNzd29yZA==              
             initialDelaySeconds: 60
             periodSeconds: 10
             timeoutSeconds: 5
