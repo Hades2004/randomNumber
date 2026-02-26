@@ -21,6 +21,17 @@ spec:
       containers:
         - name: randomnumber-app
           image: docker.io/hades2004/randomnumber:latest
+          env:
+            - name: DB_HOST
+              value: "postgres-service"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: "random_db"
+            - name: DB_USER
+              value: "user"
+            - name: DB_PASSWORD
+              value: "password"
           resources:
             limits:
               memory: "2Gi"
