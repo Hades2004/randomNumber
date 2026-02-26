@@ -25,9 +25,24 @@ pipeline {
         when {
           expression {
             unstash 'app-jar'
-            def dockerChanged = isFileChanged('dockerfile.sha256')
-            def jarChanged = isFileChanged('jar.sha256')
-            return dockerChanged || jarChanged
+            script {
+              def currentDockerHash = readFile('dockerfile.sha256').trim()
+              def currentJarHash = readFile('jar.sha256').trim()
+              
+              def lastDockerHash = fileExists('.last_dockerfile.sha256') ? readFile('.last_dockerfile.sha256').trim() : ""
+              def lastJarHash = fileExists('.last_jar.sha256') ? readFile('.last_jar.sha256').trim() : ""
+              
+              def changed = (currentDockerHash != lastDockerHash) || (currentJarHash != lastJarHash) || (currentBuild.previousBuild?.result != 'SUCCESS')
+              
+              if (changed) {
+                writeFile file: '.last_dockerfile.sha256', text: currentDockerHash
+                writeFile file: '.last_jar.sha256', text: currentJarHash
+                env.DOCKER_CHANGED = 'true'
+              } else {
+                env.DOCKER_CHANGED = 'false'
+              }
+              return env.DOCKER_CHANGED == 'true'
+            }
           }
         }
         steps {
@@ -36,12 +51,7 @@ pipeline {
       }
       stage('Docker Push') {
         when {
-          beforeAgent true
-          expression {
-            // This relies on the check performed in the Build stage
-            // In a real multi-node setup, you might want to re-verify or use a flag
-            return true 
-          }
+          expression { return env.DOCKER_CHANGED == 'true' }
         }
         steps {
           withCredentials([usernamePassword(credentialsId: 'docker-credentials', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
@@ -67,19 +77,4 @@ pipeline {
         }
       }      
     }
-}
-
-def isFileChanged(hashFile) {
-    def currentHash = readFile(hashFile).trim()
-    def lastSuccess = Jenkins.instance.getItemByFullName(env.JOB_NAME).lastSuccessfulBuild
-    
-    if (lastSuccess) {
-        try {
-            def previousHash = lastSuccess.getArtifactManager().all().find { it.name == hashFile }?.open()?.text?.trim()
-            return currentHash != previousHash
-        } catch (e) {
-            return true
-        }
-    }
-    return true
 }
