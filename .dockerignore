@@ -1,0 +1,14 @@
+# Ignore everything by default
+*
+# But allow the target directory and our JAR
+!target/
+target/*
+!target/demo.jar
+
+# Ignore common junk
+**/.git
+**/.gitignore
+**/node_modules
+**/target/classes
+**/target/generated-sources
+**/target/maven-status

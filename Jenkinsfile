@@ -6,7 +6,7 @@ pipeline {
       stage('Maven Install') {
         agent {
           docker {
-            image 'maven:3.9.11'
+            image 'maven:3.9.11-eclipse-temurin-25'
             args '-u root --privileged --network host -v /var/home/bazzite/jenkins_home/.m2:/root/.m2:Z'
           }
         }
