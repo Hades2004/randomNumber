@@ -2,6 +2,9 @@
 
 pipeline {
     agent any
+    environment {
+        K8S_API_SERVER = 'https://10.89.1.2:6443'
+    }
     stages {
       stage('Maven Install') {
         agent {
@@ -34,14 +37,14 @@ pipeline {
              sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'  
              sh 'chmod u+x ./kubectl'  
              withCredentials([string(credentialsId: 'k8s-deployer-token', variable: 'K8S_TOKEN')]) {
-                 sh './kubectl --server https://127.0.0.1:39543 --insecure-skip-tls-verify=true --token=${K8S_TOKEN} apply -f deployment.yaml'
+                 sh './kubectl --server=${K8S_API_SERVER} --insecure-skip-tls-verify=true --token=${K8S_TOKEN} apply -f deployment.yaml'
              }
         }
       }
       stage('Update Service') {
         steps {
              withCredentials([string(credentialsId: 'k8s-deployer-token', variable: 'K8S_TOKEN')]) {
-                 sh './kubectl --server https://127.0.0.1:39543 --insecure-skip-tls-verify=true --token=${K8S_TOKEN} apply -f service.yaml'
+                 sh './kubectl --server=${K8S_API_SERVER} --insecure-skip-tls-verify=true --token=${K8S_TOKEN} apply -f service.yaml'
              }
         }
       }      
