@@ -60,7 +60,7 @@ spec:
               containerPort: 50000
           livenessProbe:
             httpGet:
-              path: "/actuator/health"
+              path: "/actuator/health/liveness"
               port: 8081
             initialDelaySeconds: 90
             periodSeconds: 10
@@ -68,7 +68,7 @@ spec:
             failureThreshold: 5
           readinessProbe:
             httpGet:
-              path: "/actuator/health"
+              path: "/actuator/health/readiness"
               port: 8081
             initialDelaySeconds: 60
             periodSeconds: 10

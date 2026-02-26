@@ -16,7 +16,7 @@ public class WebSecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(requests -> requests
-                .requestMatchers("/", "/index.html", "*.js", "*.css", "/h2-console/**", "/actuator/health").permitAll()
+                .requestMatchers("/", "/index.html", "*.js", "*.css", "/h2-console/**", "/actuator/health/**").permitAll()
                 .requestMatchers("/actuator/**").hasRole("MONITORING")
                 .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
