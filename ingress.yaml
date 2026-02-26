@@ -3,7 +3,10 @@ kind: Ingress
 metadata:
   name: randomnumber-ingress
   namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
+  ingressClassName: nginx
   rules:
   - host: randomnumber.local
     http:
