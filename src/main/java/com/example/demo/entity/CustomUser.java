@@ -23,6 +23,7 @@ import lombok.Getter;
 @Entity
 @Table(name = "CUSTOM_USER")
 @Getter
+@Setter
 public class CustomUser implements UserDetails {
 
     @Id

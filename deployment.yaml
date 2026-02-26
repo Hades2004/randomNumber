@@ -31,7 +31,17 @@ spec:
             - name: DB_USER
               value: "user"
             - name: DB_PASSWORD
-              value: "password"
+              valueFrom:
+                secretKeyRef:
+                  name: db-secrets
+                  key: postgres-password
+            - name: INITIAL_USER
+              value: "admin"
+            - name: INITIAL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secrets
+                  key: admin-password
           resources:
             limits:
               memory: "2Gi"
@@ -39,30 +49,24 @@ spec:
             requests:
               memory: "500Mi"
               cpu: "500m"
-          ports:
-            - name: httpport
-              containerPort: 8081
-            - name: jnlpport
-              containerPort: 50000
-          livenessProbe:
-            httpGet:
-              path: "/randomNumber"
-              port: 8081
-              httpHeaders:
-              - name: Authorization
-                value: Basic bW9uaXRvcmluZzpwYXNzd29yZA==
-            initialDelaySeconds: 90
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 5
-          readinessProbe:
-            httpGet:
-              path: "/randomNumber"
-              port: 8081
-              httpHeaders:
-              - name: Authorization
-                value: Basic bW9uaXRvcmluZzpwYXNzd29yZA==              
-            initialDelaySeconds: 60
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 3
+              ports:
+              - name: httpport
+                containerPort: 8081
+              - name: jnlpport
+                containerPort: 50000
+                livenessProbe:
+                  httpGet:
+                    path: "/actuator/health"
+                    port: 8081
+                  initialDelaySeconds: 90
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+                readinessProbe:
+                  httpGet:
+                    path: "/actuator/health"
+                    port: 8081
+                  initialDelaySeconds: 60
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 3

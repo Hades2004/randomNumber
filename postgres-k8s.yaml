@@ -17,13 +17,16 @@ spec:
       containers:
         - name: postgres
           image: docker.io/library/postgres:16-alpine
-          environment:
+          env:
             - name: POSTGRES_DB
               value: "random_db"
             - name: POSTGRES_USER
               value: "user"
             - name: POSTGRES_PASSWORD
-              value: "password"
+              valueFrom:
+                secretKeyRef:
+                  name: db-secrets
+                  key: postgres-password
           ports:
             - containerPort: 5432
 ---
